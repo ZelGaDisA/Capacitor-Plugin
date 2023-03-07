@@ -9,6 +9,11 @@ import {
   SignInResult, TwitterSignInResult
 } from '../definitions';
 
+/**
+ * Call the sign in method on native layer and sign in on web layer with retrieved credentials.
+ * @param providerId The provider identification.
+ * @param data The provider additional information (optional).
+ */
 export const cfaSignIn = (providerId: string, data?: SignInOptions): Observable<{ userCredential: firebase.auth.UserCredential, result: SignInResult }> => {
 	const googleProvider = new firebase.auth.GoogleAuthProvider().providerId;
 	const facebookProvider = new firebase.auth.FacebookAuthProvider().providerId;
@@ -30,6 +35,12 @@ export const cfaSignIn = (providerId: string, data?: SignInOptions): Observable<
 	}
 };
 
+/**
+ * Call the Google sign in method on native layer and sign in on web layer, exposing the entire native result
+ * for use Google API with "user auth" authentication and the entire user credential from Firebase.
+ * @return Observable<{user: firebase.User, result: GoogleSignInResult}}>
+ * @See Issue #23.
+ */
 export const cfaSignInGoogle = (): Observable<{ userCredential: firebase.auth.UserCredential, result: GoogleSignInResult }> => {
 	return new Observable(observer => {
 		// get the provider id
@@ -55,6 +66,12 @@ export const cfaSignInGoogle = (): Observable<{ userCredential: firebase.auth.Us
 	});
 };
 
+/**
+ * Call the Facebook sign in method on native and sign in on web layer, exposing the entire native result
+ * for use Facebook API with "user auth" authentication and the entire user credential from Firebase.
+ * @return Observable<{user: firebase.User, result: FacebookSignInResult}}>
+ * @See Issue #23.
+ */
 export const cfaSignInFacebook = (): Observable<{ userCredential: firebase.auth.UserCredential, result: FacebookSignInResult }> => {
 	return new Observable(observer => {
 		// get the provider id
@@ -77,6 +94,12 @@ export const cfaSignInFacebook = (): Observable<{ userCredential: firebase.auth.
 	});
 };
 
+/**
+ * Call the Twitter sign in method on native and sign in on web layer, exposing the entire native result
+ * for use Twitter User API with "user auth" authentication and the entire user credential from Firebase.
+ * @return Observable<{user: firebase.User, result: TwitterSignInResult}}>
+ * @See Issue #23.
+ */
 export const cfaSignInTwitter = (): Observable<{ userCredential: firebase.auth.UserCredential, result: TwitterSignInResult }> => {
 	return new Observable(observer => {
 		// get the provider id
@@ -101,6 +124,9 @@ export const cfaSignInTwitter = (): Observable<{ userCredential: firebase.auth.U
 
 export const cfaSignInAppleProvider = 'apple.com';
 
+/**
+ * Call the Apple sign in method on native and sign in on web layer with retrieved credentials.
+ */
 export const cfaSignInApple = (): Observable<{ userCredential: firebase.auth.UserCredential, result: AppleSignInResult }> => {
 	return new Observable(observer => {
 		// native sign in
@@ -123,6 +149,12 @@ export const cfaSignInApple = (): Observable<{ userCredential: firebase.auth.Use
 	});
 }
 
+/**
+ * Call the Phone verification sign in, handling send and retrieve to code on native, but only sign in on web with retrieved credentials.
+ * This implementation is just to keep everything in compliance if others providers in this alternative calls.
+ * @param phone The user phone number.
+ * @param verificationCode The verification code sent by SMS (optional).
+ */
 export const cfaSignInPhone = (phone: string, verificationCode?: string): Observable<{ userCredential: firebase.auth.UserCredential, result: PhoneSignInResult }> => {
 	return new Observable(observer => {
 		// get the provider id
@@ -150,4 +182,5 @@ export const cfaSignInPhone = (phone: string, verificationCode?: string): Observ
 	});
 };
 
+// re-exporting the unchanged functions from facades for simple imports.
 export { cfaSignInPhoneOnCodeReceived, cfaSignInPhoneOnCodeSent, cfaSignOut } from '../facades'
